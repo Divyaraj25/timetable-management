@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="form-container">
+    <h2 class="form-title">{{ 'Edit Event' if event else 'Create New Event' }}</h2>
+    
+    <form method="POST">
+        <div class="form-group">
+            <label for="title" class="form-label">Event Title</label>
+            <input type="text" id="title" name="title" class="form-input" value="{{ event.title if event }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="description" class="form-label">Description</label>
+            <textarea id="description" name="description" class="form-input" rows="3">{{ event.description if event }}</textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="start_time" class="form-label">Start Time</label>
+            <input type="datetime-local" id="start_time" name="start_time" class="form-input" 
+                   value="{{ event.start_time.strftime('%Y-%m-%dT%H:%M') if event else '' }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="end_time" class="form-label">End Time</label>
+            <input type="datetime-local" id="end_time" name="end_time" class="form-input" 
+                   value="{{ event.end_time.strftime('%Y-%m-%dT%H:%M') if event else '' }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="event_type" class="form-label">Event Type</label>
+            <select id="event_type" name="event_type" class="form-select" required>
+                <option value="work" {{ 'selected' if event and event.event_type == 'work' }}>Work</option>
+                <option value="personal" {{ 'selected' if event and event.event_type == 'personal' }}>Personal</option>
+                <option value="health" {{ 'selected' if event and event.event_type == 'health' }}>Health</option>
+                <option value="other" {{ 'selected' if event and event.event_type == 'other' }}>Other</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="repeat" class="form-label">Repeat</label>
+            <select id="repeat" name="repeat" class="form-select">
+                <option value="">Does not repeat</option>
+                <option value="daily" {{ 'selected' if event and event.repeat == 'daily' }}>Daily</option>
+                <option value="weekly" {{ 'selected' if event and event.repeat == 'weekly' }}>Weekly</option>
+                <option value="monthly" {{ 'selected' if event and event.repeat == 'monthly' }}>Monthly</option>
+                <option value="yearly" {{ 'selected' if event and event.repeat == 'yearly' }}>Yearly</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <div class="form-check">
+                <input type="checkbox" id="send_email" name="send_email" class="form-check-input">
+                <label for="send_email" class="form-label">Send email notification</label>
+            </div>
+        </div>
+        
+        <div class="form-actions">
+            <a href="{{ url_for('index') }}" class="btn-secondary">Cancel</a>
+            <button type="submit" class="btn-primary">{{ 'Update Event' if event else 'Create Event' }}</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

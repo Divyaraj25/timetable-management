@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="analytics-header">
+    <h1>⏰ Time Distribution</h1>
+    <p>See how you're spending your time across different categories</p>
+</div>
+
+<div class="analytics-content">
+    <div class="chart-container">
+        <img src="data:image/png;base64,{{ chart_data }}" alt="Time Distribution" class="chart-image-full">
+    </div>
+
+    <div class="data-table">
+        <h3>Detailed Breakdown</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Total Hours</th>
+                    <th>Percentage</th>
+                    <th>Events</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in time_distribution %}
+                <tr>
+                    <td>{{ item._id | capitalize }}</td>
+                    <td>{{ item.total_hours | round(1) }}h</td>
+                    <td>{{ (item.total_hours / (time_distribution | sum(attribute='total_hours')) * 100) | round(1) }}%</td>
+                    <td>{{ item.event_count }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+.analytics-content {
+    display: grid;
+    gap: 2rem;
+}
+
+.chart-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    text-align: center;
+}
+
+.chart-image-full {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.data-table {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+th, td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+th {
+    background: #f8fafc;
+    font-weight: 600;
+}
+
+tr:hover {
+    background: #f1f5f9;
+}
+
+@media (max-width: 768px) {
+    .analytics-content {
+        grid-template-columns: 1fr;
+    }
+    
+    table {
+        font-size: 0.9rem;
+    }
+}
+</style>
+{% endblock %}

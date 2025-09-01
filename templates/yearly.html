@@ -1,0 +1,43 @@
+{% extends "base.html" %} {% block content %}
+<div class="calendar-header">
+  <div class="calendar-nav">
+    <a
+      href="{{ url_for('yearly_view', date=(selected_date.replace(year=selected_date.year-1)).strftime('%Y-%m-%d') ) }}"
+      class="btn-secondary"
+      >Previous</a
+    >
+    <h2 class="calendar-title">{{ year }}</h2>
+    <a
+      href="{{ url_for('yearly_view', date=(selected_date.replace(year=selected_date.year+1)).strftime('%Y-%m-%d') ) }}"
+      class="btn-secondary"
+      >Next</a
+    >
+  </div>
+  <a href="{{ url_for('new_event') }}" class="btn-primary">Add Event</a>
+</div>
+
+<div class="yearly-calendar">
+  <div class="months-grid">
+    {% for month, events in months %}
+    <div class="month-cell">
+      <h3>{{ datetime(year, month, 1).strftime('%B') }}</h3>
+      <div class="month-events">
+        {% if events %} {% for event in events|sort(attribute='start_time') %}
+        <div class="month-event {{ event.event_type }}">
+          <strong>{{ event.start_time.strftime('%d') }}</strong>: {{ event.title
+          }}
+        </div>
+        {% endfor %} {% else %}
+        <p class="no-events">No events</p>
+        {% endif %}
+      </div>
+      <a
+        href="{{ url_for('monthly_view', date=datetime(year, month, 1).strftime('%Y-%m-%d')) }}"
+        class="btn-small"
+        >View Month</a
+      >
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

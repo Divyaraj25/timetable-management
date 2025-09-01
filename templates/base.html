@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Timetable Manager</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/main.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/3d-effects.css') }}"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="nav-logo">
+          <h1>TimeFlow</h1>
+        </div>
+        <div class="nav-menu">
+          <a href="{{ url_for('index') }}" class="nav-link">Home</a>
+          <a href="{{ url_for('analytics_dashboard') }}" class="nav-link"
+            >Analytics</a
+          >
+          <a href="{{ url_for('daily_view') }}" class="nav-link">Daily</a>
+          <a href="{{ url_for('weekly_view') }}" class="nav-link">Weekly</a>
+          <a href="{{ url_for('monthly_view') }}" class="nav-link">Monthly</a>
+          <a href="{{ url_for('yearly_view') }}" class="nav-link">Yearly</a>
+          <a href="{{ url_for('new_event') }}" class="nav-link">New Event</a>
+          <a href="{{ url_for('email_settings') }}" class="nav-link"
+            >Email Settings</a
+          >
+        </div>
+      </div>
+    </nav>
+
+    <main class="main-content">{% block content %}{% endblock %}</main>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/3d-effects.js') }}"></script>
+  </body>
+</html>

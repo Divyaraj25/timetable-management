@@ -1,0 +1,23 @@
+timetable_manager/
+├── app.py
+├── config.py
+├── requirements.txt
+├── .env
+├── static/
+│   ├── css/
+│   │   ├── main.css
+│   │   └── 3d-effects.css
+│   ├── js/
+│   │   ├── main.js
+│   │   └── 3d-effects.js
+│   └── images/
+├── templates/
+│   ├── base.html
+│   ├── index.html
+│   ├── daily.html
+│   ├── weekly.html
+│   ├── monthly.html
+│   ├── yearly.html
+│   ├── event_form.html
+│   └── email_settings.html
+└── models.py

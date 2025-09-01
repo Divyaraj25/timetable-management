@@ -1,0 +1,254 @@
+{% extends "base.html" %} {% block content %}
+<div class="analytics-header">
+  <h1>📊 Analytics Dashboard</h1>
+  <p>Gain insights into your time management and productivity patterns</p>
+</div>
+
+<div class="analytics-grid">
+  <!-- Summary Cards -->
+  <div class="summary-cards">
+    <div class="summary-card">
+      <div class="card-icon">⏰</div>
+      <h3>Total Tracked Time</h3>
+      <p class="card-value">
+        {{ time_distribution | sum(attribute='total_hours') | round(1) }} hours
+      </p>
+    </div>
+
+    <div class="summary-card">
+      <div class="card-icon">📈</div>
+      <h3>Average Daily Productivity</h3>
+      <p class="card-value">
+        {{ (productivity_trends | sum(attribute='productive_hours') /
+        productivity_trends | length) | round(1) }} hours
+      </p>
+    </div>
+
+    <div class="summary-card">
+      <div class="card-icon">🎯</div>
+      <h3>Most Productive Hour</h3>
+      <p class="card-value">
+        {% set peak = peak_hours | max(attribute='hours') %} {{ "%02d:00" %
+        peak.hour }} ({{ peak.hours | round(1) }}h)
+      </p>
+    </div>
+  </div>
+
+  <!-- Charts Section -->
+  <div class="charts-section">
+    <div class="chart-card">
+      <h3>Time Distribution by Category</h3>
+      <img
+        src="data:image/png;base64,{{ distribution_chart }}"
+        alt="Time Distribution"
+        class="chart-image"
+      />
+    </div>
+
+    <div class="chart-card">
+      <h3>Productivity Trends</h3>
+      <img
+        src="data:image/png;base64,{{ trends_chart }}"
+        alt="Productivity Trends"
+        class="chart-image"
+      />
+    </div>
+
+    <div class="chart-card">
+      <h3>Peak Productivity Hours</h3>
+      <img
+        src="data:image/png;base64,{{ peak_hours_chart }}"
+        alt="Peak Hours"
+        class="chart-image"
+      />
+    </div>
+  </div>
+
+  <!-- Category Efficiency -->
+  <div class="efficiency-section">
+    <h3>Category Efficiency</h3>
+    <div class="efficiency-grid">
+      {% for category in category_efficiency %}
+      <div class="efficiency-card">
+        <h4>{{ category.category | capitalize }}</h4>
+        <div class="efficiency-metrics">
+          <span class="metric">📊 {{ category.total_events }} events</span>
+          <span class="metric">⏱️ {{ category.avg_duration }}h avg</span>
+        </div>
+        <div class="efficiency-bar">
+          <div
+            class="efficiency-fill"
+            style="width: {{ (category.avg_duration / 4 * 100) | round }}%;"
+          ></div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Quick Insights -->
+  <div class="insights-section">
+    <h3>💡 Quick Insights</h3>
+    <div class="insights-list">
+      {% if productivity_trends[-1].productive_hours > productivity_trends |
+      map(attribute='productive_hours') | max * 0.8 %}
+      <div class="insight positive">
+        <strong>Great job!</strong> You had a highly productive day yesterday.
+      </div>
+      {% endif %} {% set work_data = time_distribution | selectattr('_id',
+      'equalto', 'work') | first %} {% if work_data and work_data.total_hours >
+      40 %}
+      <div class="insight warning">
+        <strong>Work-life balance:</strong> Consider allocating more time to
+        personal activities.
+      </div>
+      {% endif %} {% if peak_hours[9].hours > peak_hours |
+      map(attribute='hours') | max * 0.7 %}
+      <div class="insight info">
+        <strong>Morning person:</strong> You're most productive around 9 AM.
+        Schedule important tasks then!
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<style>
+  .analytics-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    background: linear-gradient(135deg, #6366f1, #818cf8);
+    color: white;
+    padding: 2rem;
+    border-radius: 15px;
+  }
+
+  .summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .summary-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  }
+
+  .card-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .card-value {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #6366f1;
+    margin: 0.5rem 0;
+  }
+
+  .charts-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .chart-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  }
+
+  .chart-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+
+  .efficiency-section {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    margin-bottom: 2rem;
+  }
+
+  .efficiency-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .efficiency-card {
+    padding: 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+  }
+
+  .efficiency-metrics {
+    display: flex;
+    justify-content: space-between;
+    margin: 0.5rem 0;
+  }
+
+  .efficiency-bar {
+    background: #e2e8f0;
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .efficiency-fill {
+    background: linear-gradient(135deg, #6366f1, #818cf8);
+    height: 100%;
+    transition: width 0.3s ease;
+  }
+
+  .insights-section {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  }
+
+  .insights-list {
+    margin-top: 1rem;
+  }
+
+  .insight {
+    padding: 1rem;
+    margin: 0.5rem 0;
+    border-radius: 8px;
+    border-left: 4px solid;
+  }
+
+  .insight.positive {
+    background: #f0fdf4;
+    border-color: #16a34a;
+  }
+
+  .insight.warning {
+    background: #fffbeb;
+    border-color: #f59e0b;
+  }
+
+  .insight.info {
+    background: #eff6ff;
+    border-color: #3b82f6;
+  }
+
+  @media (max-width: 768px) {
+    .summary-cards,
+    .charts-section,
+    .efficiency-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+{% endblock %}

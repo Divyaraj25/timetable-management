@@ -1,0 +1,231 @@
+/* 3D Effects and Animations */
+.event-card,
+.action-card,
+.calendar-day-cell,
+.form-container {
+  transform: translateZ(0);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.event-card:hover,
+.action-card:hover {
+  transform: translateY(-5px) translateZ(20px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+}
+
+.btn-primary,
+.btn-small,
+.btn-secondary {
+  transform: translateZ(0);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before,
+.btn-small::before,
+.btn-secondary::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.btn-primary:hover::before,
+.btn-small:hover::before,
+.btn-secondary:hover::before {
+  left: 100%;
+}
+
+/* Parallax effect for hero section */
+.hero-section {
+  perspective: 1000px;
+}
+
+.hero-visual {
+  transform-style: preserve-3d;
+}
+
+.floating-calendar {
+  transform: translateZ(20px);
+}
+
+.floating-event:nth-child(2) {
+  transform: translateZ(10px);
+}
+
+.floating-event:nth-child(3) {
+  transform: translateZ(5px);
+}
+
+/* 3D flip card for event details */
+.event-detail-card {
+  perspective: 1000px;
+  width: 300px;
+  height: 200px;
+}
+
+.event-detail-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+
+.event-detail-card:hover .event-detail-inner {
+  transform: rotateY(180deg);
+}
+
+.event-detail-front,
+.event-detail-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 15px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.event-detail-back {
+  transform: rotateY(180deg);
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--accent-color)
+  );
+  color: white;
+}
+
+/* Hover effects for calendar days */
+.calendar-day-cell:not(.empty):hover {
+  transform: translateZ(10px) scale(1.02);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Animated background elements */
+.animated-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.bg-element {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.5;
+  animation: float 15s infinite linear;
+}
+
+.bg-element:nth-child(1) {
+  width: 300px;
+  height: 300px;
+  background: linear-gradient(135deg, var(--primary-color), transparent);
+  top: 10%;
+  left: 5%;
+  animation-delay: 0s;
+  animation-duration: 25s;
+}
+
+.bg-element:nth-child(2) {
+  width: 200px;
+  height: 200px;
+  background: linear-gradient(135deg, var(--accent-color), transparent);
+  top: 60%;
+  right: 10%;
+  animation-delay: 5s;
+  animation-duration: 20s;
+}
+
+.bg-element:nth-child(3) {
+  width: 150px;
+  height: 150px;
+  background: linear-gradient(135deg, var(--success-color), transparent);
+  bottom: 10%;
+  left: 20%;
+  animation-delay: 10s;
+  animation-duration: 15s;
+}
+
+/* Loading animation */
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--gray-light);
+  border-top: 4px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 2rem auto;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Pulse animation for notifications */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7);
+  }
+  70% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(99, 102, 241, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
+  }
+}
+
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+/* Text animation */
+.typing-animation {
+  overflow: hidden;
+  border-right: 2px solid var(--primary-color);
+  white-space: nowrap;
+  animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes blink-caret {
+  from,
+  to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: var(--primary-color);
+  }
+}

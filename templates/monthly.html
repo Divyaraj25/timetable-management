@@ -1,0 +1,56 @@
+{% extends "base.html" %} {% block content %}
+<div class="calendar-header">
+  <div class="calendar-nav">
+    {% set prev_month = selected_date.replace(day=1) - timedelta(days=1) %}
+    <a
+      href="{{ url_for('monthly_view', date=prev_month.strftime('%Y-%m-%d') ) }}"
+      class="btn-secondary"
+      >Previous</a
+    >
+    <h2 class="calendar-title">{{ selected_date.strftime('%B %Y') }}</h2>
+    {% if selected_date.month == 12 %} {% set next_month =
+    selected_date.replace(year=selected_date.year+1, month=1, day=1) %} {% else
+    %} {% set next_month = selected_date.replace(month=selected_date.month+1,
+    day=1) %} {% endif %}
+    <a
+      href="{{ url_for('monthly_view', date=next_month.strftime('%Y-%m-%d') ) }}"
+      class="btn-secondary"
+      >Next</a
+    >
+  </div>
+  <a href="{{ url_for('new_event') }}" class="btn-primary">Add Event</a>
+</div>
+
+<div class="monthly-calendar">
+  <div class="calendar-grid">
+    <div class="calendar-day-header">Mon</div>
+    <div class="calendar-day-header">Tue</div>
+    <div class="calendar-day-header">Wed</div>
+    <div class="calendar-day-header">Thu</div>
+    <div class="calendar-day-header">Fri</div>
+    <div class="calendar-day-header">Sat</div>
+    <div class="calendar-day-header">Sun</div>
+
+    {% for week in calendar %} {% for day in week %} {% if day %} {% set date,
+    events = day %}
+    <div class="calendar-day-cell">
+      <div class="day-number">{{ date.day }}</div>
+      <div class="day-events">
+        {% for event in events %}
+        <div class="day-event {{ event.event_type }}">
+          {{ event.start_time.strftime('%H:%M') }} {{ event.title }}
+        </div>
+        {% endfor %}
+      </div>
+      <a
+        href="{{ url_for('daily_view', date=date.strftime('%Y-%m-%d')) }}"
+        class="btn-small"
+        >View</a
+      >
+    </div>
+    {% else %}
+    <div class="calendar-day-cell empty"></div>
+    {% endif %} {% endfor %} {% endfor %}
+  </div>
+</div>
+{% endblock %}
