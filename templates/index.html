@@ -13,8 +13,17 @@
   </div>
   <div class="hero-visual">
     <div class="floating-calendar">
-      <div class="calendar-day">28</div>
-      <div class="calendar-month">OCT</div>
+      <div class="calendar-day" id="today-date"></div>
+      <div class="calendar-month" id="today-month"></div>
+
+      <script>
+        const today = new Date();
+        document.getElementById("today-date").innerHTML = today.getDate();
+        document.getElementById("today-month").innerHTML = today.toLocaleString(
+          "default",
+          { month: "short" }
+        );
+      </script>
     </div>
     <div class="floating-event">Meeting</div>
     <div class="floating-event">Lunch</div>
